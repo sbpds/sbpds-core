@@ -4,6 +4,8 @@ package main
 
 import (
 	"os"
+	"os/signal"
+	"syscall"
 
 	gobasiclogger "git.bjphoster.com/b.pedini/go-basic-logger"
 )
@@ -28,4 +30,8 @@ func main() {
 	logger = *new(gobasiclogger.Logger)
 	logLevel := SERVER_OPTIONS["LOGLEVEL"]
 	logger.Initialize(&logLevel)
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	s := <-quit
+	logger.Info("Quitting because signal", s)
 }
