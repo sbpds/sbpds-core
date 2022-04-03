@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	gobasiclogger "git.bjphoster.com/b.pedini/go-basic-logger"
+	"github.com/miekg/dns"
 )
 
 var (
@@ -30,6 +31,19 @@ func main() {
 	logger = *new(gobasiclogger.Logger)
 	logLevel := SERVER_OPTIONS["LOGLEVEL"]
 	logger.Initialize(&logLevel)
+	dns.HandleFunc(".", handle)
+	switch SERVER_OPTIONS["BIND_NET"] {
+	case "tcp":
+		go startServer("tcp")
+	case "udp":
+		go startServer("udp")
+	case "both":
+		go startServer("tcp")
+		go startServer("udp")
+	default:
+		logger.Fatal("Unable to start the server, network \"" + SERVER_OPTIONS["BIND_NET"] + "\" specified not valid")
+		os.Exit(1)
+	}
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	s := <-quit
