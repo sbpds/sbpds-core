@@ -1,0 +1,8 @@
+---
+zones:
+  example.com:
+    type: master
+    file: /zones/db.com.example
+  example.net:
+    type: master
+    file: /zones/db.net.example
