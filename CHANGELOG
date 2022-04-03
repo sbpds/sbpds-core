@@ -1,0 +1,5 @@
+## 0.0.1-alpha1
+- added environment variables and logging
+- added signal exits
+- added go module files
+- added first server code (useless static mappings, need to be replaced with a provider)
